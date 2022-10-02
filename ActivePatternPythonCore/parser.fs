@@ -1,5 +1,7 @@
 
-module PythonCoreParser
+namespace PythonCore
+
+module PythonCoreParser =
 
     open System
 
@@ -8,7 +10,7 @@ module PythonCoreParser
     type Token =
         |   Name of int * int * string
         |   Number of int * int * string
-        |   String of int * int * string array
+        |   String of int * int * string
         |   True of int * int 
         |   False of int * int 
         |   Ellipsis of int * int 
@@ -50,6 +52,8 @@ module PythonCoreParser
         |   None of int * int * Token
         |   Empty
 
+
+
     let (|Atom|) (tokens: TokenStream) : (ASTNode * TokenStream) =
         match tokens with
         |   head :: rest ->
@@ -84,4 +88,9 @@ module PythonCoreParser
                 |   Token.LeftCurly(_) -> raise ( SyntaxError(s, "Not implemented rule!") )
                 |   _ -> raise ( SyntaxError(s, "Expecting Atom literal!") )
         |   [] -> raise ( SyntaxError(-1, "Missing Token for parsing!") )
+        
+
+    let getAtom(stream: TokenStream) : (ASTNode * TokenStream) =
+        match stream with
+        |   Atom (a, b) -> a, b
         
